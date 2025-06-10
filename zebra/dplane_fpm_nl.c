@@ -1036,8 +1036,8 @@ static int fpm_nl_enqueue(struct fpm_nl_ctx *fnc, struct zebra_dplane_ctx *ctx)
 				      memory_order_relaxed);
 
 	/* Tell the thread to start writing. */
-	event_add_write(fnc->fthread->master, fpm_write, fnc, fnc->socket,
-			&fnc->t_write);
+	//event_add_write(fnc->fthread->master, fpm_write, fnc, fnc->socket,
+	//		&fnc->t_write);
 
 	return 0;
 }
@@ -1430,6 +1430,9 @@ static void fpm_process_queue(struct event *t)
 		dplane_provider_enqueue_out_ctx(fnc->prov, ctx);
 	}
 
+        event_add_write(fnc->fthread->master, fpm_write, fnc, fnc->socket,
+                        &fnc->t_write);
+
 	/* Update count of processed contexts */
 	atomic_fetch_add_explicit(&fnc->counters.dplane_contexts,
 				  processed_contexts, memory_order_relaxed);
@@ -1515,6 +1518,8 @@ static void fpm_process_event(struct event *t)
 	}
 }
 
+char * hapa = "BETTERSHIT";
+
 /*
  * Data plane functions.
  */
@@ -1525,8 +1530,8 @@ static int fpm_nl_start(struct zebra_dplane_provider *prov)
 	fnc = dplane_provider_get_data(prov);
 	fnc->fthread = frr_pthread_new(NULL, prov_name, prov_name);
 	assert(frr_pthread_run(fnc->fthread, NULL) == 0);
-	fnc->ibuf = stream_new(NL_PKT_BUF_SIZE);
-	fnc->obuf = stream_new(NL_PKT_BUF_SIZE * 128);
+	fnc->ibuf = stream_new(NL_PKT_BUF_SIZE * 10);
+	fnc->obuf = stream_new(NL_PKT_BUF_SIZE * 1280);
 	pthread_mutex_init(&fnc->obuf_mutex, NULL);
 	fnc->socket = -1;
 	fnc->disabled = true;
