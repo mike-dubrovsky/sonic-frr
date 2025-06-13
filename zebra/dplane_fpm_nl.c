@@ -645,6 +645,9 @@ static void fpm_read(struct event *t)
 	stream_reset(fnc->ibuf);
 }
 
+int my_bad_count;
+char * stampp = "POOPP1";
+
 static void fpm_write(struct event *t)
 {
 	struct fpm_nl_ctx *fnc = EVENT_ARG(t);
@@ -652,6 +655,8 @@ static void fpm_write(struct event *t)
 	ssize_t bwritten;
 	int rv, status;
 	size_t btotal;
+
+        my_bad_count++;
 
 	if (fnc->connecting == true) {
 		status = 0;
