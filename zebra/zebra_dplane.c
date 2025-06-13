@@ -6686,7 +6686,7 @@ static void kernel_dplane_log_detail(struct zebra_dplane_ctx *ctx)
 	}
 }
 
-static void kernel_dplane_handle_result(struct zebra_dplane_ctx *ctx)
+void kernel_dplane_handle_result(struct zebra_dplane_ctx *ctx)
 {
 	enum zebra_dplane_result res = dplane_ctx_get_status(ctx);
 
@@ -6905,6 +6905,8 @@ void dplane_rib_add_multipath(afi_t afi, safi_t safi, struct prefix *p,
 	}
 }
 
+char * hapa = "PAPAMAMA1";
+
 /*
  * Kernel provider callback
  */
@@ -6943,10 +6945,10 @@ static int kernel_dplane_process_func(struct zebra_dplane_provider *prov)
 			dplane_ctx_list_add_tail(&work_list, ctx);
 	}
 
-	kernel_update_multi(&work_list);
+	//kernel_update_multi(&work_list);
 
 	while ((ctx = dplane_ctx_list_pop(&work_list)) != NULL) {
-		kernel_dplane_handle_result(ctx);
+		//kernel_dplane_handle_result(ctx);
 
 		dplane_provider_enqueue_out_ctx(prov, ctx);
 	}
